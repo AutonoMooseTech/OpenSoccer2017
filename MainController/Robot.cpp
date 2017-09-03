@@ -7,25 +7,24 @@ Robot::Robot():
 	lightLeft(A0),
 	lightRight(A1),
 	mpu(0x68),
-	omni(I2C_ADDR_OMNI)
+	omni(8),
+	enableLed(2),
+	enableSwitch(3, true)
 	{
 	
 }
 
 void Robot::setup() {
 	mpu.initI2C();
-
-	pinMode(PIN_ENABLE_LED, OUTPUT);
-	pinMode(PIN_ENABLE_SWITCH, INPUT_PULLUP);
 }
 
 void Robot::loop() {
-	setState(state_t(digitalRead(3)));
+	setState(state_t(enableSwitch.get()));
 	SerialUSB.println(ultraRight.get());
 }
 
 void Robot::disabledSetup() {
-	digitalWrite(PIN_ENABLE_LED, LOW);
+	enableLed.set(LOW);
 
 	omni.disable();
 }
@@ -34,7 +33,7 @@ void Robot::disabledLoop() {
 }
 
 void Robot::enabledSetup() {
-	digitalWrite(PIN_ENABLE_LED, HIGH);
+	enableLed.set(HIGH);
 
 	omni.enable();
 }
