@@ -39,6 +39,10 @@ void wireReceive(uint8_t byteCount) {
 	switch(wireBytes[0]) {
 		case 'E': robot.enable(); break;
 		case 'D': robot.disable(); break;
-		case 'O': robot.omni.set(map(wireBytes[1], 0, 255, 0, 360), map(wireBytes[2], 0, 255, -1.0f, 1.0f)); break;
+		case 'O': 
+			robot.omni.set(map(wireBytes[1], 0, 255, 0, 360),
+				map(wireBytes[2], 0, 255, -1.0f, 1.0f));
+			robot.i2cTimeout.pat();
+			break;
 	}
 }

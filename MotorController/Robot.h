@@ -7,9 +7,9 @@
 #include <Wire.h>
 #include "RobotMap.h"
 #include <RobotBase.h>
-#include <Scheduler.h>
 #include <VNH2SP30.h>
 #include <OmniDrive.h>
+#include <Watchdog.h>
 
 class Robot: public Phantom::RobotBase {
 public:
@@ -21,6 +21,8 @@ public:
 	Phantom::VNH2SP30 motorD;
 
 	Phantom::OmniDrive omni;
+
+	Phantom::Watchdog i2cTimeout;
 
 	void setup();
 	void loop();
