@@ -1,14 +1,13 @@
 #include "RobotMap.h"
 #include "Robot.h"
-
-using namespace Phantom;
+#include <Wire.h>
 
 Robot robot;
 
 void setup() {
 	robot.setup();
-	// I2C
-	Wire.begin();
+	SerialUSB.begin(57600);
+	Wire.begin(); // As master
 }
 
 void loop() {
