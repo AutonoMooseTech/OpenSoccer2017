@@ -3,11 +3,7 @@
 #ifndef ROBOTMAP_H
 #define ROBOTMAP_H
 
-#include <Arduino.h>
-#include <Phantom.h>
-
 // Power/Drive Train (w/ wire color)
-
 const uint8_t MOTOR_FR_PWM 	= 6; 	// Yellow
 const uint8_t MOTOR_FR_A	= 10; 	// Green
 const uint8_t MOTOR_FR_B	= 11; 	// Blue
