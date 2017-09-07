@@ -9,7 +9,9 @@
 #include <Ultrasonic.h>
 #include <SenseLight.h>
 #include <MPU9250.h>
-#include "OmniViaI2C.h"
+#include <OmniDrive.h>
+#include "I2CMotor.h"
+#include <Encoder.h>
 #include <DigitalOutput.h>
 #include <DigitalInput.h>
 
@@ -26,7 +28,16 @@ public:
 	Phantom::MPU9250 mpu;
 
 	// Motors
-  	OmniViaI2C omni;
+	Phantom::Encoder encoderA;
+  	Phantom::Encoder encoderB;
+  	Phantom::Encoder encoderC;
+  	Phantom::Encoder encoderD;
+  	I2CMotor motorA;
+  	I2CMotor motorB;
+  	I2CMotor motorC;
+  	I2CMotor motorD;
+  	Phantom::OmniDrive omni;
+  	
 
   	// Other
   	Phantom::DigitalOutput enableLed;
