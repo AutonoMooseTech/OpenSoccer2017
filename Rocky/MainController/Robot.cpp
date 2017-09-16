@@ -4,20 +4,18 @@ Robot::Robot():
 	RobotBase(),
 	ultraLeft(4, 5),
 	ultraRight(A2, A1),
+	ultraBack(0, 0),
 	lightLeft(A0),
 	lightRight(A1),
 	mpu(0x68),
-	encoderA(11, 12),
-	encoderB(A0, 13),
-	encoderC(6, 7),
-	encoderD(8, 9),
-	motorA(0x08, 6, 10, 11),
-	motorB(0x08, 5, 8, 7),
-	motorC(0x08, 9, 14, 15),
-	motorD(0x08, 3, 2, 4),
+	ir(10, A4, A3, A5, 16),
+	motorA(0x08, 3, 2, 4),
+	motorB(0x08, 6, 7, 8),
+	motorC(0x08, 5, 6, 10),
+	motorD(0x08, 11, 12, 13),
 	omni(motorA, motorB, motorC, motorD),
 	enableLed(2),
-	enableSwitch(3, true)
+	enableSwitch(3)
 	{
 	motorA.setMax(140);
 	motorB.setMax(140);
@@ -27,11 +25,11 @@ Robot::Robot():
 
 void Robot::setup() {
 	mpu.initI2C();
+	enableSwitch.setPullup(true);
 }
 
 void Robot::loop() {
 	setState(state_t(enableSwitch.get()));
-	SerialUSB.println(encoderA.get());
 }
 
 void Robot::disabledSetup() {

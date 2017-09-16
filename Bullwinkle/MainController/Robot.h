@@ -11,37 +11,43 @@
 #include <MPU9250.h>
 #include <OmniDrive.h>
 #include "I2CMotor.h"
+#include "I2CSenseLight.h"
 #include <Encoder.h>
+#include "IRArray.h"
 #include <DigitalOutput.h>
 #include <DigitalInput.h>
 
 class Robot:
 	public Phantom::RobotBase {
 public:
-	Robot();
-
 	// Sensors
 	Phantom::Ultrasonic ultraLeft;
 	Phantom::Ultrasonic ultraRight;
+	Phantom::Ultrasonic ultraBack;
 	Phantom::SenseLight lightLeft;
 	Phantom::SenseLight lightRight;
 	Phantom::MPU9250 mpu;
+	IRArray ir;
+
+	//Phantom::Encoder encoderA;
+	//Phantom::Encoder encoderB;
+	//Phantom::Encoder encoderC;
+	//Phantom::Encoder encoderD;
 
 	// Motors
-	Phantom::Encoder encoderA;
-  	Phantom::Encoder encoderB;
-  	Phantom::Encoder encoderC;
-  	Phantom::Encoder encoderD;
-  	I2CMotor motorA;
-  	I2CMotor motorB;
-  	I2CMotor motorC;
-  	I2CMotor motorD;
-  	Phantom::OmniDrive omni;
-  	
+	I2CMotor motorA;
+	I2CMotor motorB;
+	I2CMotor motorC;
+	I2CMotor motorD;
+	Phantom::OmniDrive omni;
 
-  	// Other
-  	Phantom::DigitalOutput enableLed;
-  	Phantom::DigitalInput enableSwitch;
+	// Other
+	Phantom::DigitalOutput enableLed;
+	Phantom::DigitalInput enableSwitch;
+	Phantom::DigitalOutput sideLed;
+	Phantom::DigitalInput sideSwitch;
+
+	Robot();
 
 	void setup();
 	void loop();
