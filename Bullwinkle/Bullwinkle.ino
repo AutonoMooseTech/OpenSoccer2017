@@ -5,7 +5,6 @@
 Robot robot;
 
 void setup() {
-	robot.setup();
 	SerialUSB.begin(57600);
 	Wire.begin(); // As master
 
@@ -21,6 +20,8 @@ void setup() {
 
 	//attachInterrupt(digitalPinToInterrupt(robot.encoderD.pinA), encD, CHANGE);
 	//attachInterrupt(digitalPinToInterrupt(robot.encoderD.pinB), encD, CHANGE);
+
+	robot.setup();
 }
 
 void loop() {

@@ -8,10 +8,9 @@
 #include <Wire.h>
 #include <Ultrasonic.h>
 #include <SenseLight.h>
-#include <MPU9250.h>
+#include <MPU9250Gyro.h>
 #include <OmniDrive.h>
 #include "I2CMotor.h"
-#include "I2CSenseLight.h"
 #include <Encoder.h>
 #include "IRArray.h"
 #include <DigitalOutput.h>
@@ -26,8 +25,8 @@ public:
 	Phantom::Ultrasonic ultraBack;
 	Phantom::SenseLight lightLeft;
 	Phantom::SenseLight lightRight;
-	Phantom::MPU9250 mpu;
-	IRArray ir;
+	Phantom::MPU9250Gyro gyro;
+	IR ir;
 
 	//Phantom::Encoder encoderA;
 	//Phantom::Encoder encoderB;

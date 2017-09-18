@@ -1,5 +1,8 @@
 #include "Robot.h"
 
+const float whiteValue = 0.19;
+const float blackValue = 0.08;
+
 Robot::Robot():
 	RobotBase(),
 	ultraLeft(4, 5),
@@ -7,8 +10,8 @@ Robot::Robot():
 	ultraBack(12, 11),
 	lightLeft(A1),
 	lightRight(A2),
-	mpu(0x68),
-	ir(10, A4, A3, A5, 16),
+	gyro(0x68),
+	ir(10, A4, A3, A5),
 	//encoderA(11, 12),
 	//encoderB(A0, 13),
 	//encoderC(6, 7),
@@ -30,20 +33,24 @@ Robot::Robot():
 }
 
 void Robot::setup() {
-	//mpu.initI2C();
 	enableSwitch.setPullup(true);
 	sideSwitch.setPullup(true);
+	gyro.init();
+	gyro.callibrate();
 }
 
+float gyroValue = 0;
+
 void Robot::loop() {
+	gyro.update();
 	setState(state_t(enableSwitch.get()));
 	sideLed.set(sideSwitch.get());
-	SerialUSB.println(lightRight.get());
+	//SerialUSB.println(ir.getBest());
+	SerialUSB.println(gyro.getZ());
 }
 
 void Robot::disabledSetup() {
 	enableLed.set(LOW);
-	omni.set(0.0, 0.0);
 	motorA.disable();
 	motorB.disable();
 	motorC.disable();
@@ -59,8 +66,11 @@ void Robot::disabledLoop() {
 
 void Robot::enabledSetup() {
 	enableLed.set(HIGH);
+	gyro.reset();
+	pinMode(6, OUTPUT);
 }
 
 void Robot::enabledLoop() {
-	omni.set(-90, 0.5);
+	float angle = ((ir.getBest() * 22.5) - 180) * 1.4;
+	omni.set(angle, 0.5, gyro.getZ() / 25);
 }
