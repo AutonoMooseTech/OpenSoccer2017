@@ -83,12 +83,12 @@ void Robot::enabledLoop() {
 	if (irBest == 7 or irBest == 8) {
 		angle = 0;
 	}
-	else angle = (irBest - 7.5) * 22.5 * 1.2; // old: angle = (((irBest - 0.5) * 22.5) - 180) * 1.8;
+	else angle = (irBest - 7.5) * 22.5 * 1.4; // old: angle = (((irBest - 0.5) * 22.5) - 180) * 1.8;
 	
 	// Constraints (line detection)
 	float leftConstrain = lightLeft.get() > (whiteValue + blackValue) / 2 ? 5 : -270;
 	float rightConstrain = lightRight.get() > (whiteValue + blackValue) / 2 / 2 ? -5 : 270;
-	angle = Phantom::constrain(angle, leftConstrain, rightConstrain);
+	//angle = Phantom::constrain(angle, leftConstrain, rightConstrain);
 	// Rotation
 	float rotation;
 
@@ -108,7 +108,8 @@ void Robot::enabledLoop() {
 		}
 	}
 	// Set Drive
-	omni.set(angle, 0.4, rotation);
+	omni.set(angle, 0.6, rotation);
+	SerialUSB.println(angle);
 
 	// Kicker
 	if (switchPixyEnable.get()) {
