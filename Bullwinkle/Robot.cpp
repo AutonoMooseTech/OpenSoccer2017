@@ -1,6 +1,6 @@
 #include "Robot.h"
 
-const float whiteValue = 0.19;
+const float whiteValue = 0.15;
 const float blackValue = 0.08;
 
 Robot::Robot():
@@ -12,6 +12,7 @@ Robot::Robot():
 	lightRight(A2),
 	gyro(0x68),
 	ir(10, A4, A3, A5),
+	pixy(0x54),
 	//encoderA(11, 12),
 	//encoderB(A0, 13),
 	//encoderC(6, 7),
@@ -21,40 +22,46 @@ Robot::Robot():
 	motorC(0x08, 9, 14, 15),
 	motorD(0x08, 3, 2, 4),
 	omni(motorA, motorB, motorC, motorD),
-	enableLed(0),
-	enableSwitch(3),
-	sideLed(1),
-	sideSwitch(4)
+	kicker(6),
+	ledEnable(0),
+	ledSide(1),
+	ledPixyEnable(2),
+	switchEnable(3),
+	switchSide(4),
+	switchPixyEnable(5)
 	{
 	motorA.setMax(140);
 	motorB.setMax(140);
 	motorC.setMax(140);
 	motorD.setMax(140);
+	kicker.setDuration(150);
 }
 
 void Robot::setup() {
-	enableSwitch.setPullup(true);
-	sideSwitch.setPullup(true);
+	switchEnable.setPullup(true);
+	switchSide.setPullup(true);
+	switchPixyEnable.setPullup(true);
 	gyro.init();
-	gyro.callibrate();
+	gyro.reset();
+	pixy.init();
 }
 
 float gyroValue = 0;
 
 void Robot::loop() {
-	gyro.update();
-	setState(state_t(enableSwitch.get()));
-	sideLed.set(sideSwitch.get());
-	//SerialUSB.println(ir.getBest());
-	SerialUSB.println(gyro.getZ());
+	setState(state_t(switchEnable.get()));
+	ledSide.set(switchSide.get());
+	ledPixyEnable.set(switchPixyEnable.get());
 }
 
 void Robot::disabledSetup() {
-	enableLed.set(LOW);
+	ledEnable.set(LOW);
 	motorA.disable();
 	motorB.disable();
 	motorC.disable();
 	motorD.disable();
+	kicker.forceOff();
+	pixy.setLED(0, 0, 0);
 }
 
 void Robot::disabledLoop() {
@@ -65,12 +72,51 @@ void Robot::disabledLoop() {
 }
 
 void Robot::enabledSetup() {
-	enableLed.set(HIGH);
+	ledEnable.set(HIGH);
 	gyro.reset();
-	pinMode(6, OUTPUT);
+	//pixy.setLED(255, 225, 0);
 }
 
 void Robot::enabledLoop() {
-	float angle = ((ir.getBest() * 22.5) - 180) * 1.4;
-	omni.set(angle, 0.5, gyro.getZ() / 25);
+	float angle;
+	int irBest = ir.getBest();
+	if (irBest == 7 or irBest == 8) {
+		angle = 0;
+	}
+	else angle = (irBest - 7.5) * 22.5 * 1.2; // old: angle = (((irBest - 0.5) * 22.5) - 180) * 1.8;
+	
+	// Constraints (line detection)
+	float leftConstrain = lightLeft.get() > (whiteValue + blackValue) / 2 ? 5 : -270;
+	float rightConstrain = lightRight.get() > (whiteValue + blackValue) / 2 / 2 ? -5 : 270;
+	angle = Phantom::constrain(angle, leftConstrain, rightConstrain);
+	// Rotation
+	float rotation;
+
+	gyro.update(); // Refresh
+	rotation = gyro.getZ() / 45;
+
+	if (switchPixyEnable.get()) { // Pixy centering
+		uint16_t blocks = pixy.getBlocks();
+		for (uint16_t i = 0; i < blocks; i++) {
+			if (pixy.blocks[i].signature = switchSide.get() + 1) {
+				float x = pixy.blocks[i].x;
+				float width = pixy.blocks[i].width;
+				rotation = x + (width / 2);
+				rotation -= (PIXY_MAX_X/2);
+				rotation /= -PIXY_MAX_X;
+			}
+		}
+	}
+	// Set Drive
+	omni.set(angle, 0.4, rotation);
+
+	// Kicker
+	if (switchPixyEnable.get()) {
+		uint16_t blocks = pixy.getBlocks();
+		for (uint16_t i = 0; i < blocks; i++) {
+			if (pixy.blocks[i].signature = switchSide.get() + 1) {
+				if (pixy.blocks[i].width > 250) { kicker.trigger(); }
+			}
+		}
+	}
 }

@@ -1,20 +1,34 @@
-#ifndef IRARRAY_H
-#define IRARRAY_H
+#ifndef IR_H
+#define IR_H
 
-#include <Phantom.h>
+#include "Arduino.h"
+#include "Wire.h"
 
-class IRArray {
+#define IR_SENSOR_COUNT 16
+
+class IR {
 public:
-	IRArray(uint8_t pinPower, uint8_t pinLatch, uint8_t pinClock, uint8_t pinData, uint8_t sensorCount);
+  IR(uint8_t powerPin, uint8_t clockPin, uint8_t latchPin, uint8_t dataPin);
+  ~IR();
 
-	bool* get();
-	
-	
+  float getBest();
+
+  void refresh();
 private:
-	uint8_t pinPower, pinLatch, pinClock, pinData;
-	uint8_t sensorCount;
-	uint8_t byteCount;
+  // Pin Configuration
+  uint8_t _powerPin;
+  uint8_t _clockPin;
+  uint8_t _latchPin;
+  uint8_t _dataPin;
+
+  // Shift-In Configuration
+  uint16_t _maxPulseLength = 50;
+  uint16_t _byteCount;
+  uint8_t _rawDataArray[2];
+  uint16_t _dataArray[IR_SENSOR_COUNT];
+
+  // Outputs
+  uint8_t _best;
 };
 
-
-#endif
+#endif /* IR_H */

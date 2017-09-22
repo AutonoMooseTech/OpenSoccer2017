@@ -12,7 +12,9 @@
 #include <OmniDrive.h>
 #include "I2CMotor.h"
 #include <Encoder.h>
+#include <SolenoidController.h>
 #include "IRArray.h"
+#include <PixyI2C.h>
 #include <DigitalOutput.h>
 #include <DigitalInput.h>
 
@@ -27,6 +29,7 @@ public:
 	Phantom::SenseLight lightRight;
 	Phantom::MPU9250Gyro gyro;
 	IR ir;
+	PixyI2C pixy;
 
 	//Phantom::Encoder encoderA;
 	//Phantom::Encoder encoderB;
@@ -40,11 +43,16 @@ public:
 	I2CMotor motorD;
 	Phantom::OmniDrive omni;
 
+	// Actuators
+	Phantom::SolenoidController kicker;
+
 	// Other
-	Phantom::DigitalOutput enableLed;
-	Phantom::DigitalInput enableSwitch;
-	Phantom::DigitalOutput sideLed;
-	Phantom::DigitalInput sideSwitch;
+	Phantom::DigitalOutput ledEnable;
+	Phantom::DigitalOutput ledSide;
+	Phantom::DigitalOutput ledPixyEnable;
+	Phantom::DigitalInput switchEnable;
+	Phantom::DigitalInput switchSide;
+	Phantom::DigitalInput switchPixyEnable;
 
 	Robot();
 

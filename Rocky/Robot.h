@@ -8,10 +8,11 @@
 #include <Wire.h>
 #include <Ultrasonic.h>
 #include <NXTLightSensor.h>
-#include <MPU9250.h>
+#include <MPU9250Gyro.h>
 #include <OmniDrive.h>
 #include "I2CMotor.h"
 #include "IRArray.h"
+#include <PixyI2C.h>
 #include <DigitalOutput.h>
 #include <DigitalInput.h>
 
@@ -24,8 +25,9 @@ public:
 	Phantom::Ultrasonic ultraBack;
 	Phantom::NXTLightSensor lightLeft;
 	Phantom::NXTLightSensor lightRight;
-	Phantom::MPU9250 mpu;
-	IRArray ir;
+	Phantom::MPU9250Gyro gyro;
+	IR ir;
+	PixyI2C pixy;
 
 	// Motors
 	I2CMotor motorA;
@@ -35,8 +37,12 @@ public:
 	Phantom::OmniDrive omni;
 
 	// Other
-	Phantom::DigitalOutput enableLed;
-	Phantom::DigitalInput enableSwitch;
+	Phantom::DigitalOutput ledEnable;
+	Phantom::DigitalOutput ledSide;
+	Phantom::DigitalOutput ledPixyEnable;
+	Phantom::DigitalInput switchEnable;
+	Phantom::DigitalInput switchSide;
+	Phantom::DigitalInput switchPixyEnable;
 
 	Robot();
 

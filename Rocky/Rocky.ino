@@ -5,9 +5,9 @@
 Robot robot;
 
 void setup() {
-	robot.setup();
 	SerialUSB.begin(57600);
 	Wire.begin(); // As master
+	robot.setup();
 }
 
 void loop() {

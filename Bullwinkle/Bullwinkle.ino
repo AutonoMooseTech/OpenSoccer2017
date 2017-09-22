@@ -2,6 +2,8 @@
 #include "Robot.h"
 #include <Wire.h>
 
+#define Serial SerialUSB
+
 Robot robot;
 
 void setup() {
