@@ -22,7 +22,7 @@ private:
   uint8_t _dataPin;
 
   // Shift-In Configuration
-  uint16_t _maxPulseLength = 50;
+  uint16_t _maxPulseLength = 250;
   uint16_t _byteCount;
   uint8_t _rawDataArray[2];
   uint16_t _dataArray[IR_SENSOR_COUNT];

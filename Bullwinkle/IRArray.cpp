@@ -12,8 +12,15 @@ IR::IR(uint8_t powerPin, uint8_t clockPin, uint8_t latchPin, uint8_t _dataPin): 
 IR::~IR() { /* NOTHING TO DECONSTRUCT */ }
 
 float IR::getBest() {
+  float avg = 0;
 	refresh();
-	return _best;
+  avg += _best;
+  refresh();
+  avg += _best;
+  refresh();
+  avg += _best;
+  avg /= 3;
+	return avg;
 
 }
 

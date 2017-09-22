@@ -12,17 +12,15 @@ IR::IR(uint8_t powerPin, uint8_t clockPin, uint8_t latchPin, uint8_t _dataPin): 
 IR::~IR() { /* NOTHING TO DECONSTRUCT */ }
 
 float IR::getBest() {
-	float avg;
-	refresh();
-	avg += _best;
-	refresh();
-	avg += _best;
-	refresh();
-	avg += _best;
-	refresh();
-	avg += _best;
-	avg /= 4;
-	return _best;
+  float avg = 0;
+  refresh();
+  avg += _best;
+  refresh();
+  avg += _best;
+  refresh();
+  avg += _best;
+  avg /= 3;
+  return avg;
 
 }
 
@@ -63,6 +61,6 @@ void IR::refresh() {
     }
     //SerialUSB.print(_dataArray[i]);
     //SerialUSB.print(", ");
-  }
+  };
   //SerialUSB.println();
 }
